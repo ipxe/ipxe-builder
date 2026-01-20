@@ -1,0 +1,20 @@
+name: Sysroot (riscv32)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sysroot.yml'
+      - '.github/workflows/sysroot_riscv32.yml'
+      - 'sysroot/**'
+      - '!sysroot/*.md'
+      - '!sysroot/configs/**'
+      - 'sysroot/configs/sysroot_riscv32_defconfig'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: Build (riscv32)
+    uses: ./.github/workflows/sysroot.yml
+    with:
+      arch: riscv32

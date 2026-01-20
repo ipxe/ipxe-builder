@@ -1,0 +1,20 @@
+name: Sysroot (arm64)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sysroot.yml'
+      - '.github/workflows/sysroot_arm64.yml'
+      - 'sysroot/**'
+      - '!sysroot/*.md'
+      - '!sysroot/configs/**'
+      - 'sysroot/configs/sysroot_arm64_defconfig'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: Build (arm64)
+    uses: ./.github/workflows/sysroot.yml
+    with:
+      arch: arm64

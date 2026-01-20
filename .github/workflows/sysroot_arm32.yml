@@ -1,0 +1,20 @@
+name: Sysroot (arm32)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sysroot.yml'
+      - '.github/workflows/sysroot_arm32.yml'
+      - 'sysroot/**'
+      - '!sysroot/*.md'
+      - '!sysroot/configs/**'
+      - 'sysroot/configs/sysroot_arm32_defconfig'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: Build (arm32)
+    uses: ./.github/workflows/sysroot.yml
+    with:
+      arch: arm32

@@ -1,0 +1,20 @@
+name: Sysroot (riscv64)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sysroot.yml'
+      - '.github/workflows/sysroot_riscv64.yml'
+      - 'sysroot/**'
+      - '!sysroot/*.md'
+      - '!sysroot/configs/**'
+      - 'sysroot/configs/sysroot_riscv64_defconfig'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: Build (riscv64)
+    uses: ./.github/workflows/sysroot.yml
+    with:
+      arch: riscv64

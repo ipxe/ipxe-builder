@@ -1,0 +1,57 @@
+name: Sysroot (common)
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      label: ${{ github.ref_name == 'master' && 'latest' || github.ref_name }}
+      outdir: sysroot/output/${{ inputs.arch }}
+      pkgname: sysroot-${{ inputs.arch }}
+      reponame: ghcr.io/${{ github.repository_owner }}
+    steps:
+
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+
+      - name: Build sysroot
+        run: |
+          make -C sysroot ${{ inputs.arch }}
+
+      - name: Create tarball
+        run: |
+          tar cvjf sysroot-${{ inputs.arch }}.tar.bz2 \
+              -C ${{ env.outdir }}/host/*-buildroot-*/sysroot .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sysroot-${{ inputs.arch }}
+          path: sysroot-${{ inputs.arch }}.tar.bz2
+          if-no-files-found: error
+
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Import
+        run: |
+          docker import sysroot-${{ inputs.arch }}.tar.bz2 \
+              ${{ env.reponame }}/${{ env.pkgname }}:${{ env.label }}
+
+      - name: Publish
+        run: |
+          docker push ${{ env.reponame }}/${{ env.pkgname }}:${{ env.label }}
