@@ -123,6 +123,7 @@ jobs:
     env:
       pkgname: ipxe-builder-${{ matrix.arch }}
       reponame: ghcr.io/${{ github.repository_owner }}
+      label: ${{ github.ref_name == 'master' && 'latest' || github.ref_name }}
     steps:
 
       - name: Login
@@ -138,5 +139,5 @@ jobs:
       - name: Publish
         run: |
           docker buildx imagetools create \
-            --tag ${{ env.reponame }}/${{ env.pkgname }}:latest \
+            --tag ${{ env.reponame }}/${{ env.pkgname }}:${{ env.label }} \
             ${{ env.reponame }}/${{ env.pkgname }}:draft-${{ github.sha }}
