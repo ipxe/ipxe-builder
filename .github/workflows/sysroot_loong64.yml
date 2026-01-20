@@ -1,0 +1,18 @@
+name: Sysroot (loong64)
+
+on:
+  push:
+    paths:
+      - 'sysroot/**'
+      - '!sysroot/*.md'
+      - '!sysroot/configs/**'
+      - 'sysroot/configs/sysroot_loong64_defconfig'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: Build (loong64)
+    uses: ./.github/workflows/sysroot.yml
+    with:
+      arch: loong64

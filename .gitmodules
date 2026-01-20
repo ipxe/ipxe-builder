@@ -1,0 +1,3 @@
+[submodule "sysroot/buildroot"]
+	path = sysroot/buildroot
+	url = https://github.com/buildroot/buildroot.git
