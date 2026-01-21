@@ -53,13 +53,18 @@ COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
-    bin-x86_64-efi/snponly.efi
+    bin-x86_64-efi/snponly.efi \
+    bin-x86_64-linux/tests.linux
 
 #
 # i386 toolchain
 #
 
 FROM x86_64 AS i386
+
+RUN dnf install -y \
+	glibc-devel.i686 \
+    && dnf clean all -y
 
 FROM i386 AS check-i386
 
@@ -70,7 +75,8 @@ COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin/intel.mrom bin/ipxe.iso \
-    bin-i386-efi/snponly.efi
+    bin-i386-efi/snponly.efi \
+    bin-i386-linux/tests.linux
 
 #
 # arm64 toolchain
@@ -82,6 +88,8 @@ RUN dnf install -y \
 	gcc-aarch64-linux-gnu \
     && dnf clean all -y
 
+COPY --from=ghcr.io/ipxe/sysroot-arm64 / /usr/aarch64-linux-gnu/sys-root/
+
 ENV CROSS_COMPILE_arm64=aarch64-linux-gnu-
 
 FROM arm64 AS check-arm64
@@ -92,7 +100,8 @@ ENV JOBS=${JOBS}
 COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-arm64-efi/snponly.efi
+    bin-arm64-efi/snponly.efi \
+    bin-arm64-linux/tests.linux
 
 #
 # arm32 toolchain
@@ -104,6 +113,8 @@ RUN dnf install -y \
 	gcc-arm-linux-gnu \
     && dnf clean all -y
 
+COPY --from=ghcr.io/ipxe/sysroot-arm32 / /usr/arm-linux-gnu/sys-root/
+
 ENV CROSS_COMPILE_arm32=arm-linux-gnu-
 
 FROM arm32 AS check-arm32
@@ -114,7 +125,8 @@ ENV JOBS=${JOBS}
 COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-arm32-efi/snponly.efi
+    bin-arm32-efi/snponly.efi \
+    bin-arm32-linux/tests.linux
 
 #
 # loong64 toolchain
@@ -126,6 +138,8 @@ RUN dnf install -y \
 	gcc-loongarch64-linux-gnu \
     && dnf clean all -y
 
+COPY --from=ghcr.io/ipxe/sysroot-loong64 / /usr/loongarch64-linux-gnu/sys-root/
+
 ENV CROSS_COMPILE_loong64=loongarch64-linux-gnu-
 
 FROM loong64 AS check-loong64
@@ -136,7 +150,8 @@ ENV JOBS=${JOBS}
 COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-loong64-efi/snponly.efi
+    bin-loong64-efi/snponly.efi \
+    bin-loong64-linux/tests.linux
 
 #
 # riscv64 toolchain
@@ -147,6 +162,8 @@ FROM baseline AS riscv64
 RUN dnf install -y \
 	gcc-riscv64-linux-gnu \
     && dnf clean all -y
+
+COPY --from=ghcr.io/ipxe/sysroot-riscv64 / /usr/riscv64-linux-gnu/sys-root/
 
 ENV CROSS_COMPILE_riscv64=riscv64-linux-gnu-
 
@@ -159,7 +176,8 @@ COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-riscv64/ipxe.sbi \
-    bin-riscv64-efi/snponly.efi
+    bin-riscv64-efi/snponly.efi \
+    bin-riscv64-linux/tests.linux
 
 #
 # riscv32 toolchain
@@ -167,7 +185,11 @@ CMD make -C /ipxe/src -j ${JOBS} \
 
 FROM riscv64 AS riscv32
 
+COPY --from=ghcr.io/ipxe/sysroot-riscv32 / /usr/riscv32-linux-gnu/sys-root/
+
 ENV CROSS_COMPILE_riscv32=riscv64-linux-gnu-
+
+ENV SYSROOT_riscv32=/usr/riscv32-linux-gnu/sys-root
 
 FROM riscv32 AS check-riscv32
 
@@ -178,7 +200,8 @@ COPY --from=source /ipxe/src /ipxe/src/
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-riscv32/ipxe.sbi \
-    bin-riscv32-efi/snponly.efi
+    bin-riscv32-efi/snponly.efi \
+    bin-riscv32-linux/tests.linux
 
 #
 # Specify the default target
