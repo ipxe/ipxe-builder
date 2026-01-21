@@ -15,6 +15,7 @@ RUN dnf update -y \
 	make \
 	perl-interpreter \
 	qemu-user \
+	xz-devel \
     && dnf clean all -y
 
 #
@@ -39,8 +40,8 @@ RUN dnf install -y \
 	genisoimage \
 	mtools \
 	perl-FindBin \
+	perl-lib \
 	syslinux \
-	xz-devel \
     && dnf clean all -y
 
 FROM x86_64 AS check-x86_64
@@ -50,7 +51,9 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-x86_64-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
+    bin-x86_64-efi/snponly.efi
 
 #
 # i386 toolchain
@@ -65,7 +68,9 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-i386-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin/intel.mrom bin/ipxe.iso \
+    bin-i386-efi/snponly.efi
 
 #
 # arm64 toolchain
@@ -86,7 +91,8 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-arm64-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin-arm64-efi/snponly.efi
 
 #
 # arm32 toolchain
@@ -107,7 +113,8 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-arm32-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin-arm32-efi/snponly.efi
 
 #
 # loong64 toolchain
@@ -128,7 +135,8 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-loong64-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin-loong64-efi/snponly.efi
 
 #
 # riscv64 toolchain
@@ -149,7 +157,9 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-riscv64-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin-riscv64/ipxe.sbi \
+    bin-riscv64-efi/snponly.efi
 
 #
 # riscv32 toolchain
@@ -166,7 +176,9 @@ ENV JOBS=${JOBS}
 
 COPY --from=source /ipxe/src /ipxe/src/
 
-CMD make -C /ipxe/src -j ${JOBS} bin-riscv32-efi/snponly.efi
+CMD make -C /ipxe/src -j ${JOBS} \
+    bin-riscv32/ipxe.sbi \
+    bin-riscv32-efi/snponly.efi
 
 #
 # Specify the default target
