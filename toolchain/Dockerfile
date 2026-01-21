@@ -19,18 +19,6 @@ RUN dnf update -y \
     && dnf clean all -y
 
 #
-# Source code snapshot for build check
-#
-
-FROM baseline AS source
-
-RUN dnf install -y \
-	git-core \
-    && dnf clean all -y
-
-RUN git clone --depth 1 https://github.com/ipxe/ipxe
-
-#
 # x86_64 toolchain
 #
 
@@ -49,7 +37,9 @@ FROM x86_64 AS check-x86_64
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
@@ -71,7 +61,9 @@ FROM i386 AS check-i386
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin/intel.mrom bin/ipxe.iso \
@@ -97,7 +89,9 @@ FROM arm64 AS check-arm64
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-arm64-efi/snponly.efi \
@@ -122,7 +116,9 @@ FROM arm32 AS check-arm32
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-arm32-efi/snponly.efi \
@@ -147,7 +143,9 @@ FROM loong64 AS check-loong64
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-loong64-efi/snponly.efi \
@@ -172,7 +170,9 @@ FROM riscv64 AS check-riscv64
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-riscv64/ipxe.sbi \
@@ -196,7 +196,9 @@ FROM riscv32 AS check-riscv32
 ARG JOBS
 ENV JOBS=${JOBS}
 
-COPY --from=source /ipxe/src /ipxe/src/
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
     bin-riscv32/ipxe.sbi \
