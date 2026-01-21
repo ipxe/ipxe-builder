@@ -42,9 +42,10 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
-    bin-x86_64-efi/snponly.efi \
-    bin-x86_64-linux/tests.linux
+	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
+	bin-x86_64-efi/snponly.efi \
+	bin-x86_64-linux/tests.linux && \
+    /ipxe/src/bin-x86_64-linux/tests.linux
 
 #
 # i386 toolchain
@@ -66,9 +67,10 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin/intel.mrom bin/ipxe.iso \
-    bin-i386-efi/snponly.efi \
-    bin-i386-linux/tests.linux
+	bin/intel.mrom bin/ipxe.iso \
+	bin-i386-efi/snponly.efi \
+	bin-i386-linux/tests.linux && \
+    /ipxe/src/bin-i386-linux/tests.linux
 
 #
 # arm64 toolchain
@@ -84,6 +86,8 @@ COPY --from=ghcr.io/ipxe/sysroot-arm64 / /usr/aarch64-linux-gnu/sys-root/
 
 ENV CROSS_COMPILE_arm64=aarch64-linux-gnu-
 
+ENV QEMU_LD_PREFIX=/usr/aarch64-linux-gnu/sys-root
+
 FROM arm64 AS check-arm64
 
 ARG JOBS
@@ -94,8 +98,9 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-arm64-efi/snponly.efi \
-    bin-arm64-linux/tests.linux
+	bin-arm64-efi/snponly.efi \
+	bin-arm64-linux/tests.linux && \
+    qemu-aarch64 /ipxe/src/bin-arm64-linux/tests.linux
 
 #
 # arm32 toolchain
@@ -111,6 +116,8 @@ COPY --from=ghcr.io/ipxe/sysroot-arm32 / /usr/arm-linux-gnu/sys-root/
 
 ENV CROSS_COMPILE_arm32=arm-linux-gnu-
 
+ENV QEMU_LD_PREFIX=/usr/arm-linux-gnu/sys-root
+
 FROM arm32 AS check-arm32
 
 ARG JOBS
@@ -121,8 +128,9 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-arm32-efi/snponly.efi \
-    bin-arm32-linux/tests.linux
+	bin-arm32-efi/snponly.efi \
+	bin-arm32-linux/tests.linux && \
+    qemu-arm /ipxe/src/bin-arm32-linux/tests.linux
 
 #
 # loong64 toolchain
@@ -138,6 +146,8 @@ COPY --from=ghcr.io/ipxe/sysroot-loong64 / /usr/loongarch64-linux-gnu/sys-root/
 
 ENV CROSS_COMPILE_loong64=loongarch64-linux-gnu-
 
+ENV QEMU_LD_PREFIX=/usr/loongarch64-linux-gnu/sys-root
+
 FROM loong64 AS check-loong64
 
 ARG JOBS
@@ -148,8 +158,9 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-loong64-efi/snponly.efi \
-    bin-loong64-linux/tests.linux
+	bin-loong64-efi/snponly.efi \
+	bin-loong64-linux/tests.linux && \
+    qemu-loongarch64 /ipxe/src/bin-loong64-linux/tests.linux
 
 #
 # riscv64 toolchain
@@ -165,6 +176,8 @@ COPY --from=ghcr.io/ipxe/sysroot-riscv64 / /usr/riscv64-linux-gnu/sys-root/
 
 ENV CROSS_COMPILE_riscv64=riscv64-linux-gnu-
 
+ENV QEMU_LD_PREFIX=/usr/riscv64-linux-gnu/sys-root
+
 FROM riscv64 AS check-riscv64
 
 ARG JOBS
@@ -175,9 +188,10 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-riscv64/ipxe.sbi \
-    bin-riscv64-efi/snponly.efi \
-    bin-riscv64-linux/tests.linux
+	bin-riscv64/ipxe.sbi \
+	bin-riscv64-efi/snponly.efi \
+	bin-riscv64-linux/tests.linux && \
+    qemu-riscv64 /ipxe/src/bin-riscv64-linux/tests.linux
 
 #
 # riscv32 toolchain
@@ -191,6 +205,8 @@ ENV CROSS_COMPILE_riscv32=riscv64-linux-gnu-
 
 ENV SYSROOT_riscv32=/usr/riscv32-linux-gnu/sys-root
 
+ENV QEMU_LD_PREFIX=/usr/riscv32-linux-gnu/sys-root
+
 FROM riscv32 AS check-riscv32
 
 ARG JOBS
@@ -201,9 +217,10 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
-    bin-riscv32/ipxe.sbi \
-    bin-riscv32-efi/snponly.efi \
-    bin-riscv32-linux/tests.linux
+	bin-riscv32/ipxe.sbi \
+	bin-riscv32-efi/snponly.efi \
+	bin-riscv32-linux/tests.linux && \
+    qemu-riscv32 /ipxe/src/bin-riscv32-linux/tests.linux
 
 #
 # Specify the default target
