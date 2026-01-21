@@ -39,8 +39,6 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-RUN rm -rf /ipxe/.git
-
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
 	bin-x86_64-efi/snponly.efi \
@@ -63,8 +61,6 @@ ARG JOBS
 ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
-
-RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
@@ -95,8 +91,6 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-RUN rm -rf /ipxe/.git
-
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-arm64-efi/snponly.efi \
 	bin-arm64-linux/tests.linux && \
@@ -124,8 +118,6 @@ ARG JOBS
 ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
-
-RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-arm32-efi/snponly.efi \
@@ -155,8 +147,6 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-RUN rm -rf /ipxe/.git
-
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-loong64-efi/snponly.efi \
 	bin-loong64-linux/tests.linux && \
@@ -185,8 +175,6 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-RUN rm -rf /ipxe/.git
-
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv64/ipxe.sbi \
 	bin-riscv64-efi/snponly.efi \
@@ -213,8 +201,6 @@ ARG JOBS
 ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
-
-RUN rm -rf /ipxe/.git
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv32/ipxe.sbi \
