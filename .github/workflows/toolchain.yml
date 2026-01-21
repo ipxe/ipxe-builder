@@ -90,17 +90,15 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: toolchain
-          target: checker
-          build-args: |
-            ARCH=${{ matrix.arch }}
+          target: check-${{ matrix.arch }}
           push: false
           load: true
           tags: |
-            ${{ env.pkgname }}-check
+            check-${{ matrix.arch }}
 
       - name: Test
         run: |
-          docker run --rm ${{ env.pkgname }}-check
+          docker run --rm check-${{ matrix.arch }}
 
   publish:
     name: Publish
