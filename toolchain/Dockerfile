@@ -12,9 +12,12 @@ RUN dnf update -y \
 	cross-binutils-common \
 	cross-gcc-common \
 	gcc \
+	genisoimage \
 	make \
+	mtools \
 	perl-interpreter \
 	qemu-user \
+	syslinux \
 	xz-devel \
     && dnf clean all -y
 
@@ -25,11 +28,8 @@ RUN dnf update -y \
 FROM baseline AS x86_64
 
 RUN dnf install -y \
-	genisoimage \
-	mtools \
 	perl-FindBin \
 	perl-lib \
-	syslinux \
     && dnf clean all -y
 
 FROM x86_64 AS check-x86_64
@@ -41,7 +41,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
-	bin-x86_64-efi/snponly.efi \
+	bin-x86_64-efi/snponly.efi bin-x86_64-efi/ipxe.iso \
 	bin-x86_64-linux/tests.linux && \
     /ipxe/src/bin-x86_64-linux/tests.linux
 
@@ -64,7 +64,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
-	bin-i386-efi/snponly.efi \
+	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
 	bin-i386-linux/tests.linux && \
     /ipxe/src/bin-i386-linux/tests.linux
 
@@ -92,7 +92,7 @@ ENV JOBS=${JOBS}
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
-	bin-arm64-efi/snponly.efi \
+	bin-arm64-efi/snponly.efi bin-arm64-efi/ipxe.iso \
 	bin-arm64-linux/tests.linux && \
     qemu-aarch64 /ipxe/src/bin-arm64-linux/tests.linux
 
@@ -120,7 +120,7 @@ ENV JOBS=${JOBS}
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
-	bin-arm32-efi/snponly.efi \
+	bin-arm32-efi/snponly.efi bin-arm32-efi/ipxe.iso \
 	bin-arm32-linux/tests.linux && \
     qemu-arm /ipxe/src/bin-arm32-linux/tests.linux
 
@@ -148,7 +148,7 @@ ENV JOBS=${JOBS}
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
-	bin-loong64-efi/snponly.efi \
+	bin-loong64-efi/snponly.efi bin-loong64-efi/ipxe.iso \
 	bin-loong64-linux/tests.linux && \
     qemu-loongarch64 /ipxe/src/bin-loong64-linux/tests.linux
 
@@ -177,7 +177,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv64/ipxe.sbi \
-	bin-riscv64-efi/snponly.efi \
+	bin-riscv64-efi/snponly.efi bin-riscv64-efi/ipxe.iso \
 	bin-riscv64-linux/tests.linux && \
     qemu-riscv64 /ipxe/src/bin-riscv64-linux/tests.linux
 
@@ -204,7 +204,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv32/ipxe.sbi \
-	bin-riscv32-efi/snponly.efi \
+	bin-riscv32-efi/snponly.efi bin-riscv32-efi/ipxe.iso \
 	bin-riscv32-linux/tests.linux && \
     qemu-riscv32 /ipxe/src/bin-riscv32-linux/tests.linux
 
