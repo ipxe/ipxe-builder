@@ -30,6 +30,7 @@ FROM baseline AS x86_64
 RUN dnf install -y \
 	perl-FindBin \
 	perl-lib \
+	valgrind \
     && dnf clean all -y
 
 FROM x86_64 AS check-x86_64
@@ -43,16 +44,19 @@ CMD make -C /ipxe/src -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
 	bin-x86_64-efi/snponly.efi bin-x86_64-efi/ipxe.iso \
 	bin-x86_64-linux/tests.linux && \
-    /ipxe/src/bin-x86_64-linux/tests.linux
+    valgrind /ipxe/src/bin-x86_64-linux/tests.linux
 
 #
 # i386 toolchain
 #
 
-FROM x86_64 AS i386
+FROM baseline AS i386
 
 RUN dnf install -y \
+	perl-FindBin \
+	perl-lib \
 	glibc-devel.i686 \
+	valgrind.i686 \
     && dnf clean all -y
 
 FROM i386 AS check-i386
@@ -66,7 +70,7 @@ CMD make -C /ipxe/src -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
 	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
 	bin-i386-linux/tests.linux && \
-    /ipxe/src/bin-i386-linux/tests.linux
+    valgrind /ipxe/src/bin-i386-linux/tests.linux
 
 #
 # arm64 toolchain
