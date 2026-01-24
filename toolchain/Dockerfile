@@ -16,7 +16,6 @@ RUN dnf update -y \
 	make \
 	mtools \
 	perl-interpreter \
-	qemu-user \
 	syslinux \
 	xz-devel \
     && dnf clean all -y
@@ -80,6 +79,7 @@ FROM baseline AS arm64
 
 RUN dnf install -y \
 	gcc-aarch64-linux-gnu \
+	qemu-user-static-aarch64 \
     && dnf clean all -y
 
 COPY --from=ghcr.io/ipxe/sysroot-arm64 / /usr/aarch64-linux-gnu/sys-root/
@@ -98,7 +98,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-arm64-efi/snponly.efi bin-arm64-efi/ipxe.iso \
 	bin-arm64-linux/tests.linux && \
-    qemu-aarch64 /ipxe/src/bin-arm64-linux/tests.linux
+    qemu-aarch64-static /ipxe/src/bin-arm64-linux/tests.linux
 
 #
 # arm32 toolchain
@@ -108,6 +108,7 @@ FROM baseline AS arm32
 
 RUN dnf install -y \
 	gcc-arm-linux-gnu \
+	qemu-user-static-arm \
     && dnf clean all -y
 
 COPY --from=ghcr.io/ipxe/sysroot-arm32 / /usr/arm-linux-gnu/sys-root/
@@ -126,7 +127,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-arm32-efi/snponly.efi bin-arm32-efi/ipxe.iso \
 	bin-arm32-linux/tests.linux && \
-    qemu-arm /ipxe/src/bin-arm32-linux/tests.linux
+    qemu-arm-static /ipxe/src/bin-arm32-linux/tests.linux
 
 #
 # loong64 toolchain
@@ -136,6 +137,7 @@ FROM baseline AS loong64
 
 RUN dnf install -y \
 	gcc-loongarch64-linux-gnu \
+	qemu-user-static-loongarch64 \
     && dnf clean all -y
 
 COPY --from=ghcr.io/ipxe/sysroot-loong64 / /usr/loongarch64-linux-gnu/sys-root/
@@ -154,7 +156,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-loong64-efi/snponly.efi bin-loong64-efi/ipxe.iso \
 	bin-loong64-linux/tests.linux && \
-    qemu-loongarch64 /ipxe/src/bin-loong64-linux/tests.linux
+    qemu-loongarch64-static /ipxe/src/bin-loong64-linux/tests.linux
 
 #
 # riscv64 toolchain
@@ -164,6 +166,7 @@ FROM baseline AS riscv64
 
 RUN dnf install -y \
 	gcc-riscv64-linux-gnu \
+	qemu-user-static-riscv \
     && dnf clean all -y
 
 COPY --from=ghcr.io/ipxe/sysroot-riscv64 / /usr/riscv64-linux-gnu/sys-root/
@@ -183,7 +186,7 @@ CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv64/ipxe.sbi \
 	bin-riscv64-efi/snponly.efi bin-riscv64-efi/ipxe.iso \
 	bin-riscv64-linux/tests.linux && \
-    qemu-riscv64 /ipxe/src/bin-riscv64-linux/tests.linux
+    qemu-riscv64-static /ipxe/src/bin-riscv64-linux/tests.linux
 
 #
 # riscv32 toolchain
@@ -210,7 +213,7 @@ CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv32/ipxe.sbi \
 	bin-riscv32-efi/snponly.efi bin-riscv32-efi/ipxe.iso \
 	bin-riscv32-linux/tests.linux && \
-    qemu-riscv32 /ipxe/src/bin-riscv32-linux/tests.linux
+    qemu-riscv32-static /ipxe/src/bin-riscv32-linux/tests.linux
 
 #
 # Specify the default target
