@@ -39,4 +39,23 @@ jobs:
           push: true
           tags: |
             ${{ env.reponame }}/${{ env.pkgname }}:draft-${{ github.sha }}
-            ${{ env.reponame }}/${{ env.pkgname }}:${{ env.label }}
+
+      - name: Build (checker)
+        uses: docker/build-push-action@v6
+        with:
+          context: signer
+          target: check-signer
+          push: false
+          load: true
+          tags: |
+            check-signer
+
+      - name: Test
+        run: |
+          docker run --rm check-signer
+
+      - name: Publish
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ env.reponame }}/${{ env.pkgname }}:${{ env.label }} \
+            ${{ env.reponame }}/${{ env.pkgname }}:draft-${{ github.sha }}
