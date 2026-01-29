@@ -7,7 +7,8 @@ ARG JOBS=4
 
 FROM fedora:${FEDORA} AS baseline
 
-RUN dnf update -y \
+RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
+    && dnf update -y \
     && dnf install -y \
 	cross-binutils-common \
 	cross-gcc-common \
