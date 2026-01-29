@@ -6,7 +6,8 @@ ARG FEDORA=latest
 
 FROM fedora:${FEDORA} AS signer
 
-RUN dnf update -y \
+RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
+    && dnf update -y \
     && dnf install -y \
 	genisoimage \
 	mtools \
