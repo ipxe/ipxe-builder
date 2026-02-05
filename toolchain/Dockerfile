@@ -28,6 +28,8 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 FROM baseline AS x86_64
 
 RUN dnf install -y \
+	perl-autodie \
+	perl-File-Find \
 	perl-FindBin \
 	perl-lib \
 	valgrind \
@@ -46,7 +48,8 @@ CMD make -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
 	bin-x86_64-efi/snponly.efi bin-x86_64-efi/ipxe.iso \
 	bin-x86_64-linux/tests.linux bin-x86_64-linux/errors && \
-    valgrind ./bin-x86_64-linux/tests.linux
+    valgrind ./bin-x86_64-linux/tests.linux && \
+    ./util/niclist.pl --output /dev/null
 
 #
 # i386 toolchain
@@ -55,6 +58,8 @@ CMD make -j ${JOBS} \
 FROM baseline AS i386
 
 RUN dnf install -y \
+	perl-autodie \
+	perl-File-Find \
 	perl-FindBin \
 	perl-lib \
 	glibc-devel.i686 \
@@ -74,7 +79,8 @@ CMD make -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
 	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
 	bin-i386-linux/tests.linux bin-i386-linux/errors && \
-    valgrind ./bin-i386-linux/tests.linux
+    valgrind ./bin-i386-linux/tests.linux && \
+    ./util/niclist.pl --output /dev/null
 
 #
 # arm64 toolchain
