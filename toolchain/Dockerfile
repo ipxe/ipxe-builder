@@ -40,11 +40,13 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
 	bin-x86_64-efi/snponly.efi bin-x86_64-efi/ipxe.iso \
 	bin-x86_64-linux/tests.linux bin-x86_64-linux/errors && \
-    valgrind /ipxe/src/bin-x86_64-linux/tests.linux
+    valgrind ./bin-x86_64-linux/tests.linux
 
 #
 # i386 toolchain
@@ -66,11 +68,13 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
 	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
 	bin-i386-linux/tests.linux bin-i386-linux/errors && \
-    valgrind /ipxe/src/bin-i386-linux/tests.linux
+    valgrind ./bin-i386-linux/tests.linux
 
 #
 # arm64 toolchain
@@ -96,10 +100,12 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin-arm64-efi/snponly.efi bin-arm64-efi/ipxe.iso \
 	bin-arm64-linux/tests.linux bin-arm64-linux/errors && \
-    qemu-aarch64-static /ipxe/src/bin-arm64-linux/tests.linux
+    qemu-aarch64-static ./bin-arm64-linux/tests.linux
 
 #
 # arm32 toolchain
@@ -125,10 +131,12 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin-arm32-efi/snponly.efi bin-arm32-efi/ipxe.iso \
 	bin-arm32-linux/tests.linux bin-arm32-linux/errors && \
-    qemu-arm-static /ipxe/src/bin-arm32-linux/tests.linux
+    qemu-arm-static ./bin-arm32-linux/tests.linux
 
 #
 # loong64 toolchain
@@ -154,10 +162,12 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin-loong64-efi/snponly.efi bin-loong64-efi/ipxe.iso \
 	bin-loong64-linux/tests.linux bin-loong64-linux/errors && \
-    qemu-loongarch64-static /ipxe/src/bin-loong64-linux/tests.linux
+    qemu-loongarch64-static ./bin-loong64-linux/tests.linux
 
 #
 # riscv64 toolchain
@@ -183,11 +193,13 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin-riscv64/ipxe.sbi \
 	bin-riscv64-efi/snponly.efi bin-riscv64-efi/ipxe.iso \
 	bin-riscv64-linux/tests.linux bin-riscv64-linux/errors && \
-    qemu-riscv64-static /ipxe/src/bin-riscv64-linux/tests.linux
+    qemu-riscv64-static ./bin-riscv64-linux/tests.linux
 
 #
 # riscv32 toolchain
@@ -210,11 +222,13 @@ ENV JOBS=${JOBS}
 
 ADD https://github.com/ipxe/ipxe.git /ipxe
 
-CMD make -C /ipxe/src -j ${JOBS} \
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
 	bin-riscv32/ipxe.sbi \
 	bin-riscv32-efi/snponly.efi bin-riscv32-efi/ipxe.iso \
 	bin-riscv32-linux/tests.linux bin-riscv32-linux/errors && \
-    qemu-riscv32-static /ipxe/src/bin-riscv32-linux/tests.linux
+    qemu-riscv32-static ./bin-riscv32-linux/tests.linux
 
 #
 # Specify the default target
