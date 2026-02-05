@@ -43,7 +43,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
 	bin-x86_64-efi/snponly.efi bin-x86_64-efi/ipxe.iso \
-	bin-x86_64-linux/tests.linux && \
+	bin-x86_64-linux/tests.linux bin-x86_64-linux/errors && \
     valgrind /ipxe/src/bin-x86_64-linux/tests.linux
 
 #
@@ -69,7 +69,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
 	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
-	bin-i386-linux/tests.linux && \
+	bin-i386-linux/tests.linux bin-i386-linux/errors && \
     valgrind /ipxe/src/bin-i386-linux/tests.linux
 
 #
@@ -98,7 +98,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-arm64-efi/snponly.efi bin-arm64-efi/ipxe.iso \
-	bin-arm64-linux/tests.linux && \
+	bin-arm64-linux/tests.linux bin-arm64-linux/errors && \
     qemu-aarch64-static /ipxe/src/bin-arm64-linux/tests.linux
 
 #
@@ -127,7 +127,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-arm32-efi/snponly.efi bin-arm32-efi/ipxe.iso \
-	bin-arm32-linux/tests.linux && \
+	bin-arm32-linux/tests.linux bin-arm32-linux/errors && \
     qemu-arm-static /ipxe/src/bin-arm32-linux/tests.linux
 
 #
@@ -156,7 +156,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-loong64-efi/snponly.efi bin-loong64-efi/ipxe.iso \
-	bin-loong64-linux/tests.linux && \
+	bin-loong64-linux/tests.linux bin-loong64-linux/errors && \
     qemu-loongarch64-static /ipxe/src/bin-loong64-linux/tests.linux
 
 #
@@ -186,7 +186,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv64/ipxe.sbi \
 	bin-riscv64-efi/snponly.efi bin-riscv64-efi/ipxe.iso \
-	bin-riscv64-linux/tests.linux && \
+	bin-riscv64-linux/tests.linux bin-riscv64-linux/errors && \
     qemu-riscv64-static /ipxe/src/bin-riscv64-linux/tests.linux
 
 #
@@ -213,7 +213,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 CMD make -C /ipxe/src -j ${JOBS} \
 	bin-riscv32/ipxe.sbi \
 	bin-riscv32-efi/snponly.efi bin-riscv32-efi/ipxe.iso \
-	bin-riscv32-linux/tests.linux && \
+	bin-riscv32-linux/tests.linux bin-riscv32-linux/errors && \
     qemu-riscv32-static /ipxe/src/bin-riscv32-linux/tests.linux
 
 #
