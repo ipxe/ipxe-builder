@@ -32,6 +32,7 @@ RUN dnf install -y \
 	perl-File-Find \
 	perl-FindBin \
 	perl-lib \
+	libslirp-devel \
 	valgrind \
     && dnf clean all -y
 
@@ -47,7 +48,8 @@ WORKDIR /ipxe/src
 CMD make -j ${JOBS} \
 	bin-x86_64-pcbios/intel.mrom bin-x86_64-pcbios/ipxe.iso \
 	bin-x86_64-efi/snponly.efi bin-x86_64-efi/ipxe.iso \
-	bin-x86_64-linux/tests.linux bin-x86_64-linux/errors && \
+	bin-x86_64-linux/ipxe.linux bin-x86_64-linux/tests.linux \
+	bin-x86_64-linux/errors && \
     valgrind ./bin-x86_64-linux/tests.linux && \
     ./util/niclist.pl --output /dev/null
 
@@ -63,6 +65,7 @@ RUN dnf install -y \
 	perl-FindBin \
 	perl-lib \
 	glibc-devel.i686 \
+	libslirp-devel.i686 \
 	valgrind.i686 \
     && dnf clean all -y
 
@@ -78,7 +81,8 @@ WORKDIR /ipxe/src
 CMD make -j ${JOBS} \
 	bin/intel.mrom bin/ipxe.iso \
 	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
-	bin-i386-linux/tests.linux bin-i386-linux/errors && \
+	bin-i386-linux/ipxe.linux bin-i386-linux/tests.linux \
+	bin-i386-linux/errors && \
     valgrind ./bin-i386-linux/tests.linux && \
     ./util/niclist.pl --output /dev/null
 
@@ -110,7 +114,8 @@ WORKDIR /ipxe/src
 
 CMD make -j ${JOBS} \
 	bin-arm64-efi/snponly.efi bin-arm64-efi/ipxe.iso \
-	bin-arm64-linux/tests.linux bin-arm64-linux/errors && \
+	bin-arm64-linux/ipxe.linux bin-arm64-linux/tests.linux \
+	bin-arm64-linux/errors && \
     qemu-aarch64-static ./bin-arm64-linux/tests.linux
 
 #
@@ -141,7 +146,8 @@ WORKDIR /ipxe/src
 
 CMD make -j ${JOBS} \
 	bin-arm32-efi/snponly.efi bin-arm32-efi/ipxe.iso \
-	bin-arm32-linux/tests.linux bin-arm32-linux/errors && \
+	bin-arm32-linux/ipxe.linux bin-arm32-linux/tests.linux \
+	bin-arm32-linux/errors && \
     qemu-arm-static ./bin-arm32-linux/tests.linux
 
 #
@@ -172,7 +178,8 @@ WORKDIR /ipxe/src
 
 CMD make -j ${JOBS} \
 	bin-loong64-efi/snponly.efi bin-loong64-efi/ipxe.iso \
-	bin-loong64-linux/tests.linux bin-loong64-linux/errors && \
+	bin-loong64-linux/ipxe.linux bin-loong64-linux/tests.linux \
+	bin-loong64-linux/errors && \
     qemu-loongarch64-static ./bin-loong64-linux/tests.linux
 
 #
@@ -204,7 +211,8 @@ WORKDIR /ipxe/src
 CMD make -j ${JOBS} \
 	bin-riscv64/ipxe.sbi \
 	bin-riscv64-efi/snponly.efi bin-riscv64-efi/ipxe.iso \
-	bin-riscv64-linux/tests.linux bin-riscv64-linux/errors && \
+	bin-riscv64-linux/ipxe.linux bin-riscv64-linux/tests.linux \
+	bin-riscv64-linux/errors && \
     qemu-riscv64-static ./bin-riscv64-linux/tests.linux
 
 #
@@ -233,7 +241,8 @@ WORKDIR /ipxe/src
 CMD make -j ${JOBS} \
 	bin-riscv32/ipxe.sbi \
 	bin-riscv32-efi/snponly.efi bin-riscv32-efi/ipxe.iso \
-	bin-riscv32-linux/tests.linux bin-riscv32-linux/errors && \
+	bin-riscv32-linux/ipxe.linux bin-riscv32-linux/tests.linux \
+	bin-riscv32-linux/errors && \
     qemu-riscv32-static ./bin-riscv32-linux/tests.linux
 
 #
