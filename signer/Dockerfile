@@ -13,7 +13,9 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 	mtools \
 	opensc \
 	openssl \
+	openssl-pkcs11 \
 	osslsigncode \
+	pkcs11-provider \
 	syslinux \
     && dnf clean all -y
 
