@@ -12,6 +12,7 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 	genisoimage \
 	mtools \
 	opensc \
+	openssl \
 	osslsigncode \
 	syslinux \
     && dnf clean all -y
