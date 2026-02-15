@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       pkgname: ipxe-signer
+      pcscdname: ipxe-signer-pcscd
       reponame: ghcr.io/${{ github.repository_owner }}
       label: ${{ github.ref_name == 'master' && 'latest' || github.ref_name }}
     steps:
@@ -42,6 +43,15 @@ jobs:
           tags: |
             ${{ env.reponame }}/${{ env.pkgname }}:draft-${{ github.sha }}
 
+      - name: Build (pcscd)
+        uses: docker/build-push-action@v6
+        with:
+          context: signer
+          target: pcscd
+          push: true
+          tags: |
+            ${{ env.reponame }}/${{ env.pcscdname }}:draft-${{ github.sha }}
+
       - name: Build (checker)
         uses: docker/build-push-action@v6
         with:
@@ -61,3 +71,9 @@ jobs:
           docker buildx imagetools create \
             --tag ${{ env.reponame }}/${{ env.pkgname }}:${{ env.label }} \
             ${{ env.reponame }}/${{ env.pkgname }}:draft-${{ github.sha }}
+
+      - name: Publish (pcscd)
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ env.reponame }}/${{ env.pcscdname }}:${{ env.label }} \
+            ${{ env.reponame }}/${{ env.pcscdname }}:draft-${{ github.sha }}
