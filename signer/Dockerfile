@@ -19,6 +19,12 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 	syslinux \
     && dnf clean all -y
 
+COPY entrypoint.sh /bin/entrypoint.sh
+
+ENTRYPOINT [ "/bin/entrypoint.sh" ]
+
+CMD [ "/bin/sh" ]
+
 FROM signer AS check-signer
 
 RUN dnf install -y \
