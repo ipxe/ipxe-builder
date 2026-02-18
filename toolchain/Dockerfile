@@ -22,6 +22,29 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
     && dnf clean all -y
 
 #
+# Architecture-independent utilities
+#
+
+FROM baseline AS utils
+
+FROM utils AS check-utils
+
+RUN dnf install -y \
+	libcdio \
+	shim-x64 \
+    && dnf clean all -y
+
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+WORKDIR /ipxe/src
+
+RUN ln -s /bin/true dummy.lkrn
+
+RUN ln -s /boot/efi/EFI/BOOT/BOOTX64.EFI dummy.efi
+
+CMD ./util/genfsimg -o dummy.iso dummy.lkrn dummy.efi && iso-info dummy.iso
+
+#
 # x86_64 toolchain
 #
 
