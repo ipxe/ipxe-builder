@@ -28,6 +28,7 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 FROM baseline AS utils
 
 RUN dnf install -y \
+	envsubst \
 	pandoc \
 	rsync \
 	zip \
