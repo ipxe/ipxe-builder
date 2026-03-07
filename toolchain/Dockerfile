@@ -13,11 +13,11 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 	cross-binutils-common \
 	cross-gcc-common \
 	gcc \
-	genisoimage \
 	make \
 	mtools \
 	perl-interpreter \
 	syslinux \
+	xorriso \
 	xz-devel \
     && dnf clean all -y
 
