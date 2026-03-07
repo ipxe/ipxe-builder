@@ -276,6 +276,24 @@ CMD make -j ${JOBS} \
     qemu-riscv32-static ./bin-riscv32-linux/tests.linux
 
 #
+# Cloud utilities
+#
+
+FROM baseline AS cloud
+
+RUN dnf install -y \
+	python3-boto3 \
+    && dnf clean all -y
+
+FROM cloud AS check-cloud
+
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+WORKDIR /ipxe/src
+
+CMD ../contrib/cloud/aws-import --help
+
+#
 # Specify the default target
 #
 

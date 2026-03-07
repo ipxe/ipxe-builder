@@ -45,6 +45,7 @@ jobs:
         subpkg:
           - arm32
           - arm64
+          - cloud
           - i386
           - loong64
           - riscv32
@@ -107,6 +108,7 @@ jobs:
         subpkg:
           - arm32
           - arm64
+          - cloud
           - i386
           - loong64
           - riscv32
