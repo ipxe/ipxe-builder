@@ -283,7 +283,14 @@ FROM baseline AS cloud
 
 RUN dnf install -y \
 	python3-boto3 \
+	python3-google-cloud-storage \
+	python3-pip \
+	python3-typing-extensions \
     && dnf clean all -y
+
+RUN pip install --prefix /usr/local --root-user-action ignore \
+	google-cloud-compute \
+    && pip cache purge
 
 FROM cloud AS check-cloud
 
@@ -291,7 +298,8 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 
 WORKDIR /ipxe/src
 
-CMD ../contrib/cloud/aws-import --help
+CMD ../contrib/cloud/aws-import --help && \
+    ../contrib/cloud/gce-import --help
 
 #
 # Specify the default target
