@@ -17,6 +17,7 @@ RUN echo "install_weak_deps=False" >> /etc/dnf/dnf.conf \
 	mtools \
 	perl-interpreter \
 	syslinux \
+	util-linux \
 	xorriso \
 	xz-devel \
     && dnf clean all -y
