@@ -283,13 +283,23 @@ CMD make -j ${JOBS} \
 FROM baseline AS cloud
 
 RUN dnf install -y \
+	python3-aiofiles \
+	python3-aiohttp \
+	python3-APScheduler \
 	python3-boto3 \
+	python3-certifi \
+	python3-cryptography \
 	python3-google-cloud-storage \
 	python3-pip \
 	python3-typing-extensions \
     && dnf clean all -y
 
 RUN pip install --prefix /usr/local --root-user-action ignore \
+	alibabacloud-ecs20140526 \
+	alibabacloud-fc20230330 \
+	alibabacloud-oss-v2 \
+	alibabacloud-ram20150501 \
+	alibabacloud-sts20150401 \
 	google-cloud-compute \
     && pip cache purge
 
@@ -300,7 +310,8 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 WORKDIR /ipxe/src
 
 CMD ../contrib/cloud/aws-import --help && \
-    ../contrib/cloud/gce-import --help
+    ../contrib/cloud/gce-import --help && \
+    ../contrib/cloud/ali-import --help
 
 #
 # Specify the default target
