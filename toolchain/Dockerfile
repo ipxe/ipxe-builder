@@ -96,6 +96,7 @@ RUN dnf install -y \
 	perl-FindBin \
 	perl-lib \
 	glibc-devel.i686 \
+	libatomic.i686 \
 	libslirp-devel.i686 \
 	valgrind.i686 \
     && dnf clean all -y
