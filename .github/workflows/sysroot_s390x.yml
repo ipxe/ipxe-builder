@@ -1,0 +1,20 @@
+name: Sysroot (s390x)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sysroot.yml'
+      - '.github/workflows/sysroot_s390x.yml'
+      - 'sysroot/**'
+      - '!sysroot/*.md'
+      - '!sysroot/configs/**'
+      - 'sysroot/configs/sysroot_s390x_defconfig'
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    name: Build (s390x)
+    uses: ./.github/workflows/sysroot.yml
+    with:
+      arch: s390x
