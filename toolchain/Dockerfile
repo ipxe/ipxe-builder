@@ -278,6 +278,37 @@ CMD make -j ${JOBS} \
     qemu-riscv32-static ./bin-riscv32-linux/tests.linux
 
 #
+# s390x toolchain
+#
+
+FROM baseline AS s390x
+
+RUN dnf install -y \
+	gcc-s390x-linux-gnu \
+	qemu-user-static-s390x \
+    && dnf clean all -y
+
+COPY --from=ghcr.io/ipxe/sysroot-s390x / /usr/s390x-linux-gnu/sys-root/
+
+ENV CROSS_COMPILE_s390x=s390x-linux-gnu-
+
+ENV QEMU_LD_PREFIX=/usr/s390x-linux-gnu/sys-root
+
+FROM s390x AS check-s390x
+
+ARG JOBS
+ENV JOBS=${JOBS}
+
+ADD https://github.com/ipxe/ipxe.git /ipxe
+
+WORKDIR /ipxe/src
+
+CMD make -j ${JOBS} \
+	bin-s390x-linux/ipxe.linux bin-s390x-linux/tests.linux \
+	bin-s390x-linux/errors && \
+    qemu-s390x-static ./bin-s390x-linux/tests.linux
+
+#
 # Cloud utilities
 #
 

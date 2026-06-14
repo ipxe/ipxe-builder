@@ -50,6 +50,7 @@ jobs:
           - loong64
           - riscv32
           - riscv64
+          - s390x
           - utils
           - x86_64
     env:
@@ -113,6 +114,7 @@ jobs:
           - loong64
           - riscv32
           - riscv64
+          - s390x
           - utils
           - x86_64
     env:
