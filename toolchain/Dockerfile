@@ -111,7 +111,7 @@ ADD https://github.com/ipxe/ipxe.git /ipxe
 WORKDIR /ipxe/src
 
 CMD make -j ${JOBS} \
-	bin/intel.mrom bin/ipxe.iso \
+	bin-i386-pcbios/intel.mrom bin-i386-pcbios/ipxe.iso \
 	bin-i386-efi/snponly.efi bin-i386-efi/ipxe.iso \
 	bin-i386-linux/ipxe.linux bin-i386-linux/tests.linux \
 	bin-i386-linux/errors && \
